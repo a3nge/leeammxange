@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Générer les clés de notification</title>
+<style>
+  body { margin: 0; background: #26090F; color: #F7E8DE; font-family: system-ui, sans-serif; line-height: 1.5; }
+  main { max-width: 680px; margin: 0 auto; padding: 24px 20px 48px; }
+  h1 { font-size: 24px; font-weight: 600; }
+  p { color: #E3CBC1; }
+  button { min-height: 48px; padding: 0 20px; border-radius: 999px; border: 0; background: #FF7A2F; color: #26090F; font-weight: 800; font-size: 16px; cursor: pointer; }
+  .secondary { background: transparent; color: #F7E8DE; border: 1px solid #8A4455; min-height: 40px; font-size: 14px; margin-left: 8px; }
+  .box { background: #3B1420; border: 1px solid #5E2A38; border-radius: 16px; padding: 14px 16px; margin: 14px 0; }
+  .box b { display: block; margin-bottom: 4px; }
+  .box small { color: #CDAFA6; display: block; margin-bottom: 8px; }
+  code { display: block; word-break: break-all; background: #1C060B; border-radius: 10px; padding: 10px; font-size: 13px; color: #F4B8B0; user-select: all; }
+  .warn { border-color: #FF7A2F; }
+  [hidden] { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Générer les clés de notification</h1>
+  <p>Cette page crée trois valeurs <b>directement dans ton navigateur</b> : rien n'est envoyé nulle part. Génère-les une seule fois, copie-les aux bons endroits (voir MISE-A-JOUR.md), puis ferme la page.</p>
+  <button id="go">Générer mes clés</button>
+  <div id="out" hidden>
+    <div class="box">
+      <b>1. Clé publique</b>
+      <small>À mettre dans config.js (VAPID_PUBLIC_KEY) et dans les secrets de la fonction (VAPID_PUBLIC_KEY).</small>
+      <code id="pub"></code>
+    </div>
+    <div class="box warn">
+      <b>2. Clé privée (secrète)</b>
+      <small>À mettre uniquement dans les secrets de la fonction Supabase (VAPID_PRIVATE_KEY). Ne la mets jamais dans config.js et ne la partage pas.</small>
+      <code id="priv"></code>
+    </div>
+    <div class="box warn">
+      <b>3. Secret du webhook (secret)</b>
+      <small>À mettre dans notifications-setup.sql (REMPLACE_PAR_TON_SECRET) et dans les secrets de la fonction (WEBHOOK_SECRET).</small>
+      <code id="sec"></code>
+    </div>
+    <p>Ces valeurs disparaissent quand tu fermes la page. Si tu les perds, regénère-les et reprends les étapes.</p>
+  </div>
+</main>
+<script>
+  const b64u = (bytes) => btoa(String.fromCharCode.apply(null, bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const fromB64u = (s) => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/')), (c) => c.charCodeAt(0));
+  async function generate() {
+    const kp = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+    const jwk = await crypto.subtle.exportKey('jwk', kp.privateKey);
+    const x = fromB64u(jwk.x), y = fromB64u(jwk.y);
+    const pub = new Uint8Array(65);
+    pub[0] = 4; pub.set(x, 1); pub.set(y, 33);
+    const sec = new Uint8Array(24);
+    crypto.getRandomValues(sec);
+    return { pub: b64u(pub), priv: jwk.d, sec: Array.from(sec, (b) => b.toString(16).padStart(2, '0')).join('') };
+  }
+  document.getElementById('go').addEventListener('click', async () => {
+    const k = await generate();
+    document.getElementById('pub').textContent = k.pub;
+    document.getElementById('priv').textContent = k.priv;
+    document.getElementById('sec').textContent = k.sec;
+    document.getElementById('out').hidden = false;
+    document.getElementById('go').textContent = 'Regénérer (remplace les valeurs ci-dessus)';
+  });
+</script>
+</body>
+</html>
