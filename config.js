@@ -11,6 +11,7 @@ window.APP_CONFIG = {
   SUPABASE_URL: "https://cescmokmsqzmawdqcwyl.supabase.co",
   SUPABASE_ANON_KEY: "sb_publishable_af8W1pmhxcDc0_J8nDwNkA_vFBATfe8",
   SHARED_EMAIL: "ange.cornillet@icloud.com",
+  VAPID_PUBLIC_KEY: "BOBhVzsFsSI_XbyGvSln90YvXxkvES-PmfYdCBOMdwcojOJHr9cz6gUCXYQSH5LAYrWcEVgNZWAy7Zfb3YEge1M",
 
   BUCKET: "souvenirs",
 
