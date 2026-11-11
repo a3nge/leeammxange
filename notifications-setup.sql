@@ -25,8 +25,8 @@ create table if not exists public.app_secrets (
 alter table public.app_secrets enable row level security;
 
 insert into public.app_secrets (key, value) values
-  ('notify_url', 'https://REMPLACE_PAR_TA_REF.supabase.co/functions/v1/notify'),
-  ('notify_secret', 'REMPLACE_PAR_TON_SECRET')
+  ('notify_url', 'https://cescmokmsqzmawdqcwyl.supabase.co/functions/v1/notify'),
+  ('notify_secret', '5ccefb87c7ca5f854f64b8e69a9dd76cd52991a6198509bb')
 on conflict (key) do update set value = excluded.value;
 
 -- 3) À chaque nouveau contenu, on prévient la fonction « notify »
