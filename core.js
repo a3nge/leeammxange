@@ -10,6 +10,7 @@
   L.nl = (s) => L.esc(s).replace(/\n/g, '<br>');
   L.plural = (n, s, p) => (n >= 2 ? p : s);
 
+  L.VERSION = '11 nov. 2026 · 3';
   L.NAMES = ['Ange', 'Leeamm'];
   L.other = (n) => (n === 'Ange' ? 'Leeamm' : 'Ange');
   L.col = (n) => (n === 'Ange' ? 'var(--ange)' : 'var(--leeamm)');
