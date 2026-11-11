@@ -58,6 +58,7 @@
         ? '<button class="btn btn-ghost btn-block" data-act="signOut">Verrouiller le site sur cet appareil</button>'
         : '<p class="note">Mode démo : tout reste sur cet appareil. Le guide explique comment relier le site à une base partagée.</p><button class="btn btn-ghost btn-block" data-act="resetDemo">Réinitialiser la démo</button>') +
       (L.notifBlock ? L.notifBlock() : '') +
+      '<p class="small muted" style="text-align:center">Version du site : ' + L.VERSION + '</p>' +
       '<button class="btn btn-text btn-block" data-act="closeSheet">Fermer</button>');
   };
   A.setMe = (el) => { Store.setMe(el.dataset.name); closeSheet(); L.renderChrome(); redraw(); };
@@ -321,12 +322,27 @@
     const lp = j.linksByPlatform || {};
     return { title: e.title, artist: e.artistName, cover: e.thumbnailUrl, deezer: lp.deezer && lp.deezer.url, apple: lp.appleMusic && lp.appleMusic.url };
   }
-  async function searchTracks(q) {
+   async function searchItunes(q) {
     const j = await getJson('https://itunes.apple.com/search?media=music&entity=song&limit=12&country=FR&term=' + encodeURIComponent(q), 9000);
     return (j.results || []).filter((x) => x.trackName && x.trackViewUrl).map((x) => ({
       title: x.trackName, artist: x.artistName || '', album: x.collectionName || '',
       cover: (x.artworkUrl100 || '').replace('100x100bb', '600x600bb'), apple: x.trackViewUrl, deezer: ''
     }));
+  }
+  async function searchDeezer(q) {
+    const j = await jsonp('https://api.deezer.com/search?limit=12&output=jsonp&q=' + encodeURIComponent(q), 8000);
+    return ((j && j.data) || []).filter((x) => x.title && x.link).map((x) => ({
+      title: x.title, artist: (x.artist && x.artist.name) || '', album: (x.album && x.album.title) || '',
+      cover: (x.album && (x.album.cover_big || x.album.cover_medium)) || '', apple: '', deezer: x.link
+    }));
+  }
+  /* Deux sources : si l'une est indisponible (réseau, navigateur), l'autre prend le relais */
+  async function searchTracks(q) {
+    let err = null;
+    try { const r = await searchItunes(q); if (r.length) return r; } catch (e) { err = e; }
+    try { const r = await searchDeezer(q); if (r.length || !err) return r; } catch (e) { err = err || e; }
+    if (err) throw err;
+    return [];
   }
   async function resolveDeezer(t) {
     if (t.apple) { try { const r = await resolveSong(t.apple); if (r.deezer) return r.deezer; } catch (e) { /* on essaie autrement */ } }
@@ -338,8 +354,11 @@
     return '';
   }
   async function completeTrack(r) {
-    const deezer = r.deezer || (await resolveDeezer(r));
-    return { title: r.title, artist: r.artist, cover: r.cover || '', apple: r.apple || '', deezer: deezer || '' };
+    let deezer = r.deezer || '';
+    let apple = r.apple || '';
+    if (!deezer) deezer = await resolveDeezer(r);
+    if (!apple && deezer) { try { const x = await resolveSong(deezer); apple = x.apple || ''; } catch (e) { /* recherche Apple Music au clic */ } }
+    return { title: r.title, artist: r.artist, cover: r.cover || '', apple, deezer: deezer || '' };
   }
   L.completeTrack = completeTrack;
 
@@ -359,7 +378,7 @@
         if (r.title) res = [{ title: r.title, artist: r.artist || '', album: '', cover: r.cover || '', apple: r.apple || '', deezer: r.deezer || '' }];
       } else res = await searchTracks(q);
     } catch (e) {
-      if (my === seq && $('#trackResults')) $('#trackResults').innerHTML = '<p class="error">La recherche est indisponible pour le moment. Tu peux ajouter le morceau à la main ci-dessous.</p>';
+            if (my === seq && $('#trackResults')) $('#trackResults').innerHTML = '<p class="error">La recherche est indisponible pour le moment (' + esc(e && e.name === 'AbortError' ? 'délai dépassé' : e && e.message ? e.message : 'erreur inconnue') + '). Vérifie ta connexion, ou ajoute le morceau à la main ci-dessous.</p>';
       return;
     }
     if (my !== seq || !$('#trackResults')) return;
