@@ -58,7 +58,7 @@
       let items;
       try { items = await suggest(q, w._tok); } catch (e) {
         console.warn('Google Places', e);
-        if (seq === w._seq && st) { st.textContent = 'Suggestions indisponibles : ce texte restera cliquable vers Google Maps.'; if (res) res.innerHTML = ''; }
+        if (seq === w._seq && st) { st.textContent = 'Suggestions indisponibles (' + (e && e.message ? e.message : 'erreur') + ') : ce texte restera cliquable vers Google Maps.'; if (res) res.innerHTML = ''; }
         return;
       }
       if (seq !== w._seq || !document.body.contains(w)) return;
