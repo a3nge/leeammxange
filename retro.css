@@ -1,0 +1,130 @@
+/* ==========================================================
+   retro.css : direction artistique rétro / grain / bordeaux-écru
+   Se charge APRÈS style.css et nouveautes.css (il les surcharge).
+   ========================================================== */
+
+/* ---------- 1. Palette & polices ---------- */
+:root {
+  --ecru: #E4DDD3;
+  --bg: #702F3B;        /* bordeaux */
+  --bg2: #5A2430;
+  --surface: #5B2430;
+  --surface2: #4A1C26;
+  --line: #9A5F6B; --line2: #B07C86; --line3: #E4DDD3;
+  --text: #E4DDD3;      /* écru */
+  --text2: #D6CCC0;
+  --muted: #C9B3AE;
+  --ange: #FCCCDC;      /* Ange */
+  --leeamm: #8DB051;    /* Leeamm */
+  --orange: #E4DDD3;    /* l'ancien accent orange devient écru */
+  --orange-text: #E4DDD3;
+  --danger: #FFB4A2;
+  --script: 'Pinyon Script', cursive;
+  --serif: 'Space Mono', ui-monospace, monospace;
+  --sans: 'Space Mono', ui-monospace, monospace;
+}
+
+/* ---------- 2. Base ---------- */
+html, body { background: var(--bg); }
+body { font-size: 14px; line-height: 1.5; letter-spacing: .01em; }
+::selection { background: var(--ange); color: var(--bg); }
+
+/* Trame de points (halftone) + grain */
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 9998;
+  background-image: radial-gradient(rgba(0,0,0,.30) 1px, transparent 1.3px);
+  background-size: 4px 4px; opacity: .35; mix-blend-mode: multiply;
+}
+body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+  opacity: .30; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='.33 .33 .33 0 0 .33 .33 .33 0 0 .33 .33 .33 0 0 0 0 0 0 1'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+/* grain qui "vibre" : seulement sur grand écran, et sans réduction de mouvement */
+@media (min-width: 700px) and (prefers-reduced-motion: no-preference) {
+  body::after { inset: -50%; width: 200%; height: 200%; animation: grain .9s steps(6) infinite; }
+  @keyframes grain {
+    0% { transform: translate(0,0) } 20% { transform: translate(-4%,3%) }
+    40% { transform: translate(3%,-5%) } 60% { transform: translate(-5%,-2%) }
+    80% { transform: translate(4%,4%) } 100% { transform: translate(0,0) }
+  }
+}
+@media print { body::before, body::after, .bandeau { display: none !important; } }
+
+/* ---------- 3. Bandeau défilant ---------- */
+.bandeau { overflow: hidden; white-space: nowrap; background: var(--ange); color: var(--bg);
+  border-bottom: 2px solid var(--ecru); font-weight: 700; font-size: 12px; letter-spacing: .14em;
+  text-transform: uppercase; padding: calc(7px + env(safe-area-inset-top)) 0 7px; position: relative; z-index: 5; }
+.bandeau span { display: inline-block; padding-left: 100%; animation: defile 28s linear infinite; }
+@keyframes defile { to { transform: translateX(-100%); } }
+@media (prefers-reduced-motion: reduce) { .bandeau span { animation: none; padding-left: 12px; } }
+
+/* ---------- 4. Titres ---------- */
+#top { padding-top: 16px; }
+.brand { font-family: var(--script); font-style: normal; font-weight: 400; font-size: clamp(32px, 10vw, 44px);
+  line-height: 1; letter-spacing: 0; white-space: nowrap; }
+.brand .l, .brand .a { text-shadow: 2px 2px 0 var(--bg2); }
+.brand .x { font-family: var(--serif); font-size: 16px; color: var(--ecru); vertical-align: middle; margin: 0 2px; }
+.h2 { font-family: var(--script); font-size: 40px; font-weight: 400; line-height: 1.05; color: var(--ange); }
+.zone-title { font-family: var(--script); font-style: normal; font-size: 30px; color: var(--ange); }
+.h3 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.big { font-size: 16px; }
+.eyebrow, .tagline { letter-spacing: .16em; }
+.count .num { font-weight: 700; letter-spacing: -.04em; }
+.count .unit { font-style: normal; font-size: 16px; text-transform: uppercase; }
+.total { font-weight: 700; }
+
+/* ---------- 5. Cartes : papier collé, ombre dure rose / verte ---------- */
+.card { border-width: 2px; border-color: var(--ecru); border-radius: 0;
+  box-shadow: 5px 5px 0 var(--ange); transform: rotate(-.3deg); }
+.card:nth-child(even) { box-shadow: 5px 5px 0 var(--leeamm); transform: rotate(.35deg); }
+.card.alt { border-color: var(--ecru); }
+
+/* La grande carte d'accueil : papier écru (variables locales inversées) */
+.hero {
+  --bg: #F1EBE2; --bg2: #E4DDD3; --surface: #E4DDD3; --surface2: #D9D0C4;
+  --line: #702F3B; --line2: #702F3B; --line3: #702F3B;
+  --text: #702F3B; --text2: #5A2430; --muted: #8A5560;
+  --orange: #702F3B; --orange-text: #702F3B;
+  --leeamm: #4F6D25;
+  position: relative; background: var(--ecru); color: var(--text);
+}
+.hero::after { content: ""; position: absolute; top: -24px; right: -14px; width: 60px; height: 60px;
+  background: var(--leeamm); pointer-events: none; transform: rotate(12deg);
+  clip-path: polygon(50% 0,61% 18%,80% 8%,78% 30%,100% 35%,84% 52%,98% 72%,76% 74%,72% 96%,54% 82%,38% 100%,32% 78%,8% 84%,20% 62%,0 48%,22% 38%,14% 14%,38% 22%); }
+.hero .btn-primary, .hero .btn-ghost { box-shadow: 3px 3px 0 var(--leeamm); }
+
+/* ---------- 6. Angles droits partout (sauf pastilles rondes) ---------- */
+.btn, .tab, .chip, .me-chip, .pl-chip, .stage, .pill-on, .input, .act, .exp, .okline, .result,
+.folder, .sheet, .seg, .seg button, .picker, .cover, .fileic, .tile, .wish-img, .pend img,
+.pf-opt, .setrow, details.manual, .lightbox, .bar, .bar i, #toast { border-radius: 0; }
+
+/* ---------- 7. Navigation ---------- */
+#tabs { border-bottom: 2px dashed var(--ecru); }
+.tab { border-width: 2px; text-transform: uppercase; font-size: 12px; letter-spacing: .08em; }
+.me-chip { border-width: 2px; border-color: var(--ecru); }
+
+/* ---------- 8. Boutons ---------- */
+.btn { text-transform: uppercase; letter-spacing: .06em; font-size: 12.5px;
+  transition: transform .12s, box-shadow .12s; }
+.btn-primary { border: 2px solid var(--ecru); box-shadow: 4px 4px 0 var(--ange); }
+.btn-ghost { border-width: 2px; box-shadow: 3px 3px 0 var(--leeamm); }
+.btn-primary:active, .btn-ghost:active { transform: translate(3px, 3px); box-shadow: 0 0 0 transparent; }
+@media (hover: hover) { .btn-primary:hover, .btn-ghost:hover { transform: translate(-2px, -2px); } }
+
+/* ---------- 9. Champs, fenêtres, toast ---------- */
+.input { border-width: 2px; border-color: var(--ecru); }
+.input:focus-visible { outline: 3px solid var(--ange); outline-offset: 2px; }
+.sheet { border: 2px solid var(--ecru); border-bottom: 0; box-shadow: 0 -6px 0 var(--ange); }
+#toast { border: 2px solid var(--bg); box-shadow: 4px 4px 0 var(--leeamm); }
+.overlay { background: rgba(40, 8, 16, .75); }
+
+/* ---------- 10. Photos : noir & blanc, bords "sticker", collage ---------- */
+.tile { border: 3px solid var(--ecru); box-shadow: 4px 4px 0 var(--ange); background: var(--bg2); }
+.tile-wrap:nth-child(even) .tile { box-shadow: 4px 4px 0 var(--leeamm); }
+.tile-wrap:nth-child(3n+1) { transform: rotate(-1.2deg); }
+.tile-wrap:nth-child(3n+2) { transform: rotate(1deg); }
+.tile img, .pend img, .cover img, .wish-img { filter: grayscale(1) contrast(1.15); transition: filter .25s; }
+.tile:hover img, .tile:active img, .pend img:hover { filter: none; }
+.pend img, .cover { border: 2px solid var(--ecru); }
+.cover, .tile { background: var(--bg2); }
