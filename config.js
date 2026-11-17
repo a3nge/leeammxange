@@ -8,6 +8,7 @@
   en suivant le guide LISEZ-MOI.md.
 */
 window.APP_CONFIG = {
+  GOOGLE_MAPS_API_KEY: "AIzaSyBE8-eGRjHfkBccsRAExFERuxtjy0Hdxnk",
   SUPABASE_URL: "https://cescmokmsqzmawdqcwyl.supabase.co",
   SUPABASE_ANON_KEY: "sb_publishable_af8W1pmhxcDc0_J8nDwNkA_vFBATfe8",
   SHARED_EMAIL: "ange.cornillet@icloud.com",
