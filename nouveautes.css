@@ -1,0 +1,47 @@
+/* nouveautes.css : Dépenses, Activités, adresses, couleurs de dossiers. */
+.maplink { display: inline-flex; align-items: center; gap: 6px; color: var(--orange-text); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; word-break: break-word; }
+.maplink .ic, .place-t .ic { width: 16px; height: 16px; flex: none; }
+.place-t { display: inline-flex; align-items: center; gap: 6px; }
+.place-row { display: flex; flex-direction: column; gap: 2px; padding: 6px 0; }
+.pf-res { display: flex; flex-direction: column; gap: 6px; }
+.pf-res:empty { display: none; }
+.pf-opt { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 12px; text-align: left; background: var(--bg); border: 1px solid var(--line); border-radius: 14px; color: var(--text); font: inherit; font-weight: 600; }
+.pf-opt .ic { width: 18px; height: 18px; color: var(--orange-text); flex: none; }
+.pf-state { margin: 0; min-height: 0; }
+.pf-state:empty { display: none; }
+.check { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }
+
+.swatch-set { border: 0; padding: 0; margin: 0; }
+.swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.swatch { position: relative; width: 44px; height: 44px; }
+.swatch input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.swatch span { display: block; width: 100%; height: 100%; border-radius: 50%; border: 3px solid transparent; }
+.swatch input:checked + span { border-color: var(--text); box-shadow: 0 0 0 2px var(--bg) inset; }
+.swatch input:focus-visible + span { outline: 2px solid var(--orange); outline-offset: 2px; }
+.folder .ic { color: var(--fc, var(--orange-text)); }
+.folder[style] { box-shadow: inset 5px 0 0 var(--fc); }
+
+.seg { display: flex; gap: 4px; padding: 4px; background: var(--bg2); border: 1px solid var(--line); border-radius: 16px; }
+.seg button { flex: 1; min-height: 44px; padding: 4px 6px; border: 0; border-radius: 12px; background: transparent; color: var(--muted); font: inherit; font-size: 13px; font-weight: 800; }
+.seg button.on { background: var(--text); color: var(--bg); }
+.pl-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.pl-chip { display: inline-flex; align-items: center; gap: 6px; flex: none; min-height: 40px; padding: 4px 14px; border: 1px solid var(--line2); border-radius: 999px; background: transparent; color: var(--text2); font: inherit; font-size: 14px; font-weight: 700; }
+.pl-chip.on { background: var(--text); color: var(--bg); border-color: var(--text); }
+.pl-chip i, .tag.fold i, .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--fc, var(--line3)); flex: none; }
+.pl-chip .ic { width: 16px; height: 16px; }
+.pl-chip.ghost { border-style: dashed; color: var(--orange-text); }
+.total { font-family: var(--serif); font-size: 30px; margin: 0; }
+.right { text-align: right; }
+
+.wish { display: flex; flex-direction: column; gap: 10px; border-left: 5px solid var(--fc, var(--line3)); }
+.wish.is-done { opacity: 0.7; }
+.wish.is-done .h3 { text-decoration: line-through; }
+.wish-main { display: flex; align-items: center; gap: 12px; width: 100%; padding: 0; background: transparent; border: 0; text-align: left; color: inherit; font: inherit; }
+.wish-img { width: 64px; height: 64px; object-fit: cover; border-radius: 14px; flex: none; background: var(--bg); }
+.wish-meta { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 4px; font-size: 13px; }
+.tag.fold { display: inline-flex; align-items: center; gap: 5px; }
+.wish-price { font-family: var(--serif); font-size: 20px; color: var(--orange-text); white-space: nowrap; }
+.wish-place { font-size: 14px; }
+.wish-act { justify-content: flex-end; }
+.wf-row { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.block { display: block; }
