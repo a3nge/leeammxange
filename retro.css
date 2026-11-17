@@ -128,3 +128,66 @@ body::after {
 .tile:hover img, .tile:active img, .pend img:hover { filter: none; }
 .pend img, .cover { border: 2px solid var(--ecru); }
 .cover, .tile { background: var(--bg2); }
+
+
+/* ==========================================================
+   11. ORDINATEUR (≥ 900px) : menu latéral, fenêtres centrées
+   ========================================================== */
+@media (min-width: 900px) {
+  body { font-size: 15px; }
+
+  /* Mise en page : titre en haut, menu à gauche, contenu à droite */
+  #app { display: grid; max-width: 1120px; column-gap: 44px;
+    grid-template-columns: 220px minmax(0, 1fr);
+    grid-template-areas: "top top" "presence presence" "tabs view";
+    grid-template-rows: auto auto 1fr;
+    padding: 0 32px calc(60px + env(safe-area-inset-bottom)); }
+  #top { grid-area: top; padding: 30px 0 14px; }
+  #presence { grid-area: presence; padding: 0 0 14px; }
+  #view { grid-area: view; padding: 6px 0 0; max-width: 820px; }
+  .brand { font-size: 52px; }
+
+  /* Onglets : menu vertical fixe */
+  #tabs { grid-area: tabs; position: sticky; top: 24px; align-self: start;
+    flex-direction: column; gap: 12px; overflow: visible; padding: 8px 8px 8px 0;
+    background: transparent; border-bottom: 0; }
+  .tab { width: 100%; min-height: 48px; text-align: left; padding: 0 18px; font-size: 13px;
+    box-shadow: 4px 4px 0 var(--bg2); cursor: pointer; transition: transform .12s, box-shadow .12s; }
+  .tab:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ange); }
+  .tab.on { box-shadow: 4px 4px 0 var(--leeamm); }
+  .tab.on:hover { box-shadow: 6px 6px 0 var(--leeamm); }
+
+  /* Contenu plus aéré */
+  .stack { gap: 26px; }
+  .card { padding: 22px; }
+  .hero { padding: 30px; }
+  .count .num { font-size: 112px; }
+  .h2 { font-size: 52px; }
+  .grid3 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+  .grid2 { gap: 20px; }
+  .lightbox img { max-height: 68vh; }
+
+  /* Fenêtres : boîte de dialogue centrée (au lieu du panneau du bas) */
+  .sheet { left: 50%; right: auto; top: 50%; bottom: auto; margin: 0;
+    transform: translate(-50%, -50%); width: min(660px, calc(100% - 64px)); max-width: none;
+    max-height: 88vh; padding: 26px; border: 2px solid var(--ecru);
+    box-shadow: 8px 8px 0 var(--ange); }
+
+  /* Survols et barre de défilement */
+  .btn, .chip, .pl-chip, .folder, .exp, .result, .wish-main, .show-card, .trip-mini { cursor: pointer; }
+  .chip:hover, .pl-chip:hover { border-color: var(--ecru); }
+  .folder:hover, .exp:hover, .result:hover { border-color: var(--ecru); }
+  html { scrollbar-color: var(--ecru) var(--bg2); }
+  ::-webkit-scrollbar { width: 14px; height: 14px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--ecru); border: 3px solid var(--bg2); }
+
+  /* Écran de connexion */
+  .gate-card { max-width: 440px; }
+}
+
+/* Très grands écrans */
+@media (min-width: 1500px) {
+  #app { max-width: 1240px; grid-template-columns: 240px minmax(0, 1fr); }
+  #view { max-width: 900px; }
+}
