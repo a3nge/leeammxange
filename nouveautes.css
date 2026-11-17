@@ -45,3 +45,9 @@
 .wish-act { justify-content: flex-end; }
 .wf-row { padding: 6px 0; border-bottom: 1px solid var(--line); }
 .block { display: block; }
+.seg button, .pl-chip, .wish-main, .pf-opt { -webkit-appearance: none; appearance: none; }
+.seg button:not(.on) { background: transparent; color: var(--muted); }
+.pl-chip:not(.on) { background: transparent; color: var(--text2); }
+.pl-chip.on, .seg button.on { background: var(--text); color: var(--bg); }
+.wish-main, .wish-main .h3 { color: var(--text); }
+.wish-main { background: transparent; }
