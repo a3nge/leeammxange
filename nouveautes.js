@@ -415,7 +415,7 @@
     if (L.renderPresence) L.renderPresence();
   };
   const HOME_LINK = {
-    label: 'Calendrier de l'Avent',                 // texte du bouton
+    label: "Calendrier de l'Avent",                 // texte du bouton
     url: 'https://bit.ly/4tbB76E'        // adresse ouverte au clic (mets la tienne)
   };
   { const o = L.views.home;
