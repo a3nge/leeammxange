@@ -416,7 +416,7 @@
   };
   const HOME_LINK = {
     label: "Calendrier de l'Avent",                 // texte du bouton
-    url: 'https://bit.ly/4tbB76E'        // adresse ouverte au clic (mets la tienne)
+    url: 'https://a3nge.github.io/calendrier-de-l-avant-leeamm/'        // adresse ouverte au clic (mets la tienne)
   };
   { const o = L.views.home;
     L.views.home = () => {
