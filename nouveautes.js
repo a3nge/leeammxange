@@ -414,4 +414,17 @@
     if (on && on.scrollIntoView) { try { on.scrollIntoView({ inline: 'center', block: 'nearest' }); } catch (e) { /* ok */ } }
     if (L.renderPresence) L.renderPresence();
   };
+  const HOME_LINK = {
+    label: 'Calendrier de l'Avent',                 // texte du bouton
+    url: 'https://bit.ly/4tbB76E'        // adresse ouverte au clic (mets la tienne)
+  };
+  { const o = L.views.home;
+    L.views.home = () => {
+      const h = o();
+      if (!HOME_LINK.url) return h;
+      const marker = '<section class="stack"><h3 class="h3">Dates à retenir</h3>';
+      const btn = '<a class="btn btn-primary btn-block" href="' + esc(HOME_LINK.url) + '" target="_blank" rel="noopener noreferrer">' + esc(HOME_LINK.label) + '</a>';
+      return h.indexOf(marker) >= 0 ? h.replace(marker, btn + marker) : h;
+    };
+  }
 })();
